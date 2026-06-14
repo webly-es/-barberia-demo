@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barbería San Isidro — Cortes de Precisión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:     #C9A84C;
+      --gold-lt:  #E2C77A;
+      --black:    #080808;
+      --surface:  #111111;
+      --surface2: #1a1a1a;
+      --border:   #272727;
+      --white:    #FFFFFF;
+      --muted:    #888888;
+      --light:    #CCCCCC;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5%;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s, border-color 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,0.96);
+      border-bottom-color: var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--gold-lt) !important; color: var(--black) !important; }
+
+    .nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 24px; height: 1.5px; background: var(--white); transition: all 0.3s; }
+
+    /* ─── HERO ─── */
+    #inicio {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      padding: 8rem 5% 5rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to bottom, rgba(8,8,8,0.75) 0%, rgba(8,8,8,0.55) 40%, rgba(8,8,8,0.85) 100%),
+        url('./foto-hero.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+    .hero-line-left {
+      position: absolute; left: 5%; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+    .hero-line-right {
+      position: absolute; right: 5%; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      text-align: center; max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 0.5rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-subtitle {
+      font-size: 1rem; font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+      max-width: 480px; margin: 0 auto 3rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-outline {
+      border: 1px solid rgba(201,168,76,0.5);
+      color: var(--gold);
+      padding: 1rem 2.5rem;
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--muted); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollAnim 2s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50% { opacity: 0.4; transform: scaleY(0.6); }
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 7rem 5%; }
+    .section-label {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700; line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-desc {
+      color: var(--muted); font-size: 0.95rem;
+      line-height: 1.8; max-width: 480px;
+    }
+    .gold-line {
+      width: 60px; height: 1px;
+      background: var(--gold); margin: 2rem 0;
+    }
+
+    /* ─── NOSOTROS ─── */
+    #nosotros {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .about-img {
+      aspect-ratio: 4/5;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-img::before {
+      content: '';
+      position: absolute; inset: 12px;
+      border: 1px solid rgba(201,168,76,0.2);
+      pointer-events: none;
+    }
+    .about-img-inner {
+      text-align: center; color: var(--border);
+    }
+    .about-img-inner svg { width: 80px; height: 80px; opacity: 0.3; }
+    .about-img-inner p { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 1rem; color: var(--muted); }
+    .about-corner {
+      position: absolute; bottom: -1px; right: -1px;
+      width: 80px; height: 80px;
+      border-top: 1px solid var(--gold);
+      border-left: 1px solid var(--gold);
+    }
+    .stats-row {
+      display: flex; gap: 2.5rem; margin-top: 2.5rem;
+    }
+    .stat { }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* ─── SERVICIOS ─── */
+    #servicios { background: var(--black); }
+    .servicios-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 4rem; gap: 2rem; flex-wrap: wrap;
+    }
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .servicio-card {
+      background: var(--surface);
+      padding: 2.5rem 2rem;
+      transition: background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .servicio-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .servicio-card:hover { background: var(--surface2); }
+    .servicio-card:hover::after { transform: scaleX(1); }
+    .servicio-icon {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(201,168,76,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+    }
+    .servicio-icon svg { width: 20px; height: 20px; }
+    .servicio-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+    .servicio-desc {
+      font-size: 0.82rem; color: var(--muted);
+      line-height: 1.7; margin-bottom: 1.5rem;
+    }
+    .servicio-price {
+      display: flex; align-items: baseline; gap: 0.3rem;
+    }
+    .price-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700; color: var(--gold);
+    }
+    .price-unit { font-size: 0.75rem; color: var(--muted); }
+
+    /* ─── RESERVAS ─── */
+    #reservar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .reservas-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 5rem; align-items: start;
+    }
+    .reservas-info { }
+    .reservas-steps { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .step { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .step-num {
+      min-width: 32px; height: 32px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      flex-shrink: 0;
+    }
+    .step-text { }
+    .step-text strong { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.2rem; }
+    .step-text span { font-size: 0.8rem; color: var(--muted); }
+
+    /* CALENDAR */
+    .booking-panel {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+    }
+    .booking-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.5rem;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem; font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* MINI CALENDAR */
+    .calendar-wrap { margin-bottom: 1.2rem; }
+    .calendar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .calendar-month {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 600;
+    }
+    .cal-nav {
+      background: none; border: 1px solid var(--border);
+      color: var(--white); width: 30px; height: 30px;
+      cursor: pointer; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .cal-nav:hover { border-color: var(--gold); color: var(--gold); }
+    .calendar-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-day-name {
+      text-align: center; font-size: 0.62rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); padding: 0.4rem 0;
+    }
+    .cal-day {
+      text-align: center; padding: 0.55rem 0;
+      font-size: 0.82rem; cursor: pointer;
+      color: var(--light);
+      transition: background 0.15s, color 0.15s;
+      border-radius: 1px;
+    }
+    .cal-day:hover:not(.empty):not(.past) { background: rgba(201,168,76,0.12); color: var(--gold); }
+    .cal-day.selected { background: var(--gold); color: var(--black); font-weight: 700; }
+    .cal-day.past { color: var(--border); cursor: not-allowed; }
+    .cal-day.today { color: var(--gold); font-weight: 600; }
+    .cal-day.empty { cursor: default; }
+
+    /* TIME SLOTS */
+    .slots-label {
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.7rem;
+    }
+    .slots-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 6px; margin-bottom: 1.2rem;
+    }
+    .slot {
+      border: 1px solid var(--border);
+      padding: 0.45rem 0; text-align: center;
+      font-size: 0.75rem; cursor: pointer;
+      transition: all 0.15s; color: var(--light);
+    }
+    .slot:hover { border-color: var(--gold); color: var(--gold); }
+    .slot.selected { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 700; }
+    .slot.unavailable { opacity: 0.25; cursor: not-allowed; }
+    .slot.unavailable:hover { border-color: var(--border); color: var(--light); }
+
+    .btn-book {
+      width: 100%;
+      background: var(--gold); color: var(--black);
+      padding: 1.1rem; border: none; cursor: pointer;
+      font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-book:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+    .booking-success {
+      display: none; text-align: center; padding: 2rem 0;
+    }
+    .booking-success .check {
+      width: 60px; height: 60px; border: 1px solid var(--gold);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: var(--gold);
+    }
+    .booking-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 0.5rem;
+    }
+    .booking-success p { font-size: 0.85rem; color: var(--muted); }
+
+    /* ─── UBICACIÓN ─── */
+    #ubicacion { background: var(--black); }
+    .ubicacion-grid {
+      display: grid; grid-template-columns: 1fr 1.5fr;
+      gap: 4rem; align-items: start;
+    }
+    .location-info { }
+    .info-block { margin-bottom: 2rem; }
+    .info-block-title {
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.7rem;
+    }
+    .info-block p {
+      font-size: 0.9rem; color: var(--light);
+      line-height: 1.8;
+    }
+    .horario-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.85rem; padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--light);
+    }
+    .horario-row:last-child { border-bottom: none; }
+    .horario-row span:first-child { color: var(--muted); }
+    .horario-row .open { color: var(--gold); }
+    .map-wrap {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .map-wrap iframe {
+      width: 100%; height: 400px;
+      border: none; display: block;
+      filter: grayscale(60%) contrast(1.1) brightness(0.85);
+    }
+    .map-overlay-btn {
+      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      background: var(--black);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.7rem 1.4rem;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .map-overlay-btn:hover { background: rgba(201,168,76,0.1); }
+
+    /* ─── GOOGLE BADGE ─── */
+    .google-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 5%;
+      display: flex; align-items: center; justify-content: center; gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .google-badge {
+      display: flex; align-items: center; gap: 1.2rem;
+    }
+    .google-icon {
+      width: 48px; height: 48px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .google-badge-text { }
+    .google-badge-text strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; display: block; margin-bottom: 0.2rem;
+    }
+    .stars { color: #FFC107; font-size: 1rem; letter-spacing: 2px; }
+    .google-badge-text small { font-size: 0.75rem; color: var(--muted); }
+    .google-divider {
+      width: 1px; height: 60px; background: var(--border);
+    }
+    .google-cta-text {
+      text-align: center;
+    }
+    .google-cta-text p {
+      font-size: 0.8rem; color: var(--muted); margin-bottom: 0.8rem;
+    }
+    .google-cta-text strong {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      color: var(--white); display: block; margin-bottom: 1rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5%;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--gold);
+      letter-spacing: 0.15em; text-transform: uppercase;
+      text-decoration: none;
+    }
+    .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 0.75rem; color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-social a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      color: var(--muted); text-decoration: none;
+      font-size: 1rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-social a:hover { border-color: var(--gold); color: var(--gold); }
+    .footer-bottom {
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.72rem; color: var(--muted);
+    }
+    .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+    /* ─── WOLNA BADGE ─── */
+    .wolna-badge {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
+      background: var(--black);
+      border: 1px solid var(--gold);
+      padding: 0.6rem 1.1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: background 0.2s;
+    }
+    .wolna-badge:hover { background: rgba(201,168,76,0.05); }
+    .wolna-badge span { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; }
+    .wolna-badge strong { font-size: 0.72rem; color: var(--gold); font-weight: 700; }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .about-grid,
+      .reservas-grid,
+      .ubicacion-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img { aspect-ratio: 16/9; }
+      .nav-links { display: none; flex-direction: column; position: fixed; top: 70px; left: 0; right: 0; background: var(--surface2); padding: 2rem 5%; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .nav-burger { display: flex; }
+      .servicios-header { flex-direction: column; align-items: flex-start; }
+      .google-divider { display: none; }
+      .google-section { gap: 2rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .form-row { grid-template-columns: 1fr; }
+      .slots-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">Barbería · San Isidro</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#nosotros">El local</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+    <li><a href="#reservar" class="nav-cta">Reservar cita</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-line-left"></div>
+  <div class="hero-line-right"></div>
+  <div class="hero-content fade-up">
+    <div class="hero-badge">San Isidro · Tenerife</div>
+    <h1 class="hero-title">
+      El corte que<br><em>mereces.</em>
+    </h1>
+    <p class="hero-subtitle">
+      Precisión, estilo y tradición barbera.<br>
+      Reserva tu cita en segundos.
+    </p>
+    <div class="hero-btns">
+      <a href="#reservar" class="btn-primary">Reservar cita</a>
+      <a href="#servicios" class="btn-outline">Ver servicios</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Desliza</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- EL LOCAL -->
+<section id="nosotros">
+  <div class="about-grid">
+    <div class="about-img" style="padding:0;background:none;">
+      <img src="./foto-local.png"
+           alt="Interior Barbería San Isidro"
+           style="width:100%;height:100%;object-fit:cover;display:block;" />
+      <div class="about-corner"></div>
+    </div>
+    <div class="fade-up">
+      <p class="section-label">Sobre nosotros</p>
+      <h2 class="section-title">Tradición &<br><em>precisión</em></h2>
+      <div class="gold-line"></div>
+      <p class="section-desc">
+        Un espacio pensado para el hombre que cuida su imagen.
+        Sillones dorados, ambiente cuidado y un equipo que trata
+        cada corte como una obra. Sin prisas. Sin concesiones.
+      </p>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num">+500</div>
+          <div class="stat-label">Clientes activos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Años de experiencia</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">★ 4.9</div>
+          <div class="stat-label">En Google Maps</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="servicios-header fade-up">
+    <div>
+      <p class="section-label">Nuestros servicios</p>
+      <h2 class="section-title">Lo que<br><em>ofrecemos</em></h2>
+    </div>
+    <a href="#reservar" class="btn-outline">Reservar ahora</a>
+  </div>
+  <div class="servicios-grid fade-up">
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 3v18M6 3l6 9M6 3l-2 3M18 3l-6 9M18 3l2 3M6 12l6 9M18 21l-6-9"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Corte de pelo</div>
+      <p class="servicio-desc">Corte clásico o moderno adaptado a tu estilo. Incluye lavado y acabado.</p>
+      <div class="servicio-price">
+        <span class="price-num">15</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M8 12c-3 1-5 3-5 5h18c0-2-2-4-5-5"/>
+          <path d="M9 18c0 2 1.3 3 3 3s3-1 3-3"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Corte + Barba</div>
+      <p class="servicio-desc">El pack completo. Corte de pelo y perfilado o arreglo de barba en una sola visita.</p>
+      <div class="servicio-price">
+        <span class="price-num">22</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M4 6h16M4 10h16M4 14h10M4 18h6"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Arreglo de barba</div>
+      <p class="servicio-desc">Perfilado y definición de barba. Acabado con aceite y bálsamo hidratante.</p>
+      <div class="servicio-price">
+        <span class="price-num">10</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Afeitado clásico</div>
+      <p class="servicio-desc">Afeitado con navaja, toalla caliente y productos premium. La experiencia completa.</p>
+      <div class="servicio-price">
+        <span class="price-num">18</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+          <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Corte niño</div>
+      <p class="servicio-desc">Para los más pequeños. Corte adaptado con paciencia y profesionalidad.</p>
+      <div class="servicio-price">
+        <span class="price-num">12</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+      </div>
+      <div class="servicio-name">Bono 5 cortes</div>
+      <p class="servicio-desc">Prepaga 5 cortes y ahorra. Ideal para clientes habituales.</p>
+      <div class="servicio-price">
+        <span class="price-num">60</span><span class="price-unit">€</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESERVAR -->
+<section id="reservar">
+  <div class="reservas-grid">
+    <div class="reservas-info fade-up">
+      <p class="section-label">Cita previa</p>
+      <h2 class="section-title">Reserva tu<br><em>momento</em></h2>
+      <div class="gold-line"></div>
+      <p class="section-desc">
+        Sin llamadas, sin esperas. Elige tu día, tu hora y tu servicio.
+        Recibirás confirmación por WhatsApp.
+      </p>
+      <div class="reservas-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-text">
+            <strong>Elige el servicio</strong>
+            <span>Selecciona lo que necesitas</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-text">
+            <strong>Elige día y hora</strong>
+            <span>Ve la disponibilidad en tiempo real</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-text">
+            <strong>Confirma tu cita</strong>
+            <span>Recibes confirmación por WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-panel fade-up">
+      <div class="booking-title">Reservar cita</div>
+      <div id="bookingForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tu nombre</label>
+            <input type="text" class="form-input" placeholder="Carlos García" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono</label>
+            <input type="tel" class="form-input" placeholder="600 000 000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Servicio</label>
+          <select class="form-select">
+            <option value="">Selecciona un servicio</option>
+            <option>Corte de pelo — 15€</option>
+            <option>Corte + Barba — 22€</option>
+            <option>Arreglo de barba — 10€</option>
+            <option>Afeitado clásico — 18€</option>
+            <option>Corte niño — 12€</option>
+            <option>Bono 5 cortes — 60€</option>
+          </select>
+        </div>
+
+        <!-- CALENDAR -->
+        <div class="calendar-wrap">
+          <label class="form-label">Selecciona un día</label>
+          <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;">
+            <div class="calendar-header">
+              <button class="cal-nav" onclick="changeMonth(-1)">&#8592;</button>
+              <div class="calendar-month" id="calMonthLabel"></div>
+              <button class="cal-nav" onclick="changeMonth(1)">&#8594;</button>
+            </div>
+            <div class="calendar-grid" id="calGrid">
+              <div class="cal-day-name">L</div>
+              <div class="cal-day-name">M</div>
+              <div class="cal-day-name">X</div>
+              <div class="cal-day-name">J</div>
+              <div class="cal-day-name">V</div>
+              <div class="cal-day-name">S</div>
+              <div class="cal-day-name">D</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIME SLOTS -->
+        <div id="slotsSection" style="display:none;">
+          <p class="slots-label" id="slotsLabel">Hora disponible</p>
+          <div class="slots-grid" id="slotsGrid"></div>
+        </div>
+
+        <button class="btn-book" onclick="submitBooking()">Confirmar reserva</button>
+      </div>
+
+      <div class="booking-success" id="bookingSuccess">
+        <div class="check">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3>Cita reservada</h3>
+        <p>Te confirmamos por WhatsApp en breve.<br>¡Hasta pronto!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE BADGE -->
+<div class="google-section fade-up">
+  <div class="google-badge">
+    <div class="google-icon">📍</div>
+    <div class="google-badge-text">
+      <strong>Encuéntranos en Google</strong>
+      <div class="stars">★★★★★</div>
+      <small>4.9 · Más de 180 reseñas</small>
+    </div>
+  </div>
+  <div class="google-divider"></div>
+  <div class="google-cta-text">
+    <strong>¿Nos buscas desde Google Maps?</strong>
+    <p>Pulsa "Reservar" directamente desde tu búsqueda</p>
+    <a href="#reservar" class="btn-primary" style="font-size:0.75rem;padding:0.7rem 1.8rem;">Reservar desde aquí</a>
+  </div>
+</div>
+
+<!-- UBICACIÓN -->
+<section id="ubicacion">
+  <div class="ubicacion-grid">
+    <div class="fade-up">
+      <p class="section-label">Dónde estamos</p>
+      <h2 class="section-title"><em>San Isidro,</em><br>Tenerife</h2>
+      <div class="gold-line"></div>
+
+      <div class="info-block">
+        <div class="info-block-title">Dirección</div>
+        <p>Calle Principal, s/n<br>San Isidro, Tenerife</p>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">Teléfono</div>
+        <p>+34 600 000 000</p>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">Horario</div>
+        <div class="horario-row"><span>Lunes – Viernes</span><span class="open">9:00 – 20:00</span></div>
+        <div class="horario-row"><span>Sábado</span><span class="open">9:00 – 14:00</span></div>
+        <div class="horario-row"><span>Domingo</span><span>Cerrado</span></div>
+      </div>
+
+      <a href="#reservar" class="btn-primary" style="margin-top:1rem;">Reservar cita</a>
+    </div>
+
+    <div class="map-wrap fade-up">
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-16.5900%2C28.0700%2C-16.5700%2C28.0900&layer=mapnik"
+        title="Ubicación Barbería San Isidro"
+        loading="lazy">
+      </iframe>
+      <a href="https://maps.google.com/?q=San+Isidro+Tenerife" target="_blank" class="map-overlay-btn">
+        Abrir en Google Maps ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#inicio" class="footer-logo">Barbería · San Isidro</a>
+    <div class="footer-links">
+      <a href="#nosotros">El local</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#reservar">Reservar</a>
+      <a href="#ubicacion">Contacto</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" title="Instagram">&#x1F4F7;</a>
+      <a href="https://wa.me/34600000000" title="WhatsApp">&#x1F4AC;</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Barbería San Isidro · Todos los derechos reservados ·
+    Web creada por <a href="#">Wolna</a>
+  </div>
+</footer>
+
+<!-- WOLNA BADGE -->
+<a href="#" class="wolna-badge">
+  <span>Web por</span>
+  <strong>WOLNA</strong>
+</a>
+
+<script>
+  // ─── NAVBAR SCROLL ───
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ─── MOBILE MENU ───
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+
+  // ─── FADE UP OBSERVER ───
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ─── CALENDAR ───
+  const today = new Date();
+  let currentYear = today.getFullYear();
+  let currentMonth = today.getMonth();
+  let selectedDay = null;
+
+  const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const SLOTS_AM = ['9:00','9:30','10:00','10:30','11:00','11:30'];
+  const SLOTS_PM = ['15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+  const UNAVAILABLE = [0, 2, 4]; // índices que simulan no disponibilidad
+
+  function renderCalendar() {
+    const label = document.getElementById('calMonthLabel');
+    label.textContent = MONTHS[currentMonth] + ' ' + currentYear;
+
+    const grid = document.getElementById('calGrid');
+    // limpiar días anteriores (mantener cabeceras)
+    while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const offset = firstDay === 0 ? 6 : firstDay - 1; // lunes=0
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    for (let i = 0; i < offset; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      grid.appendChild(empty);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-day';
+      cell.textContent = d;
+
+      const cellDate = new Date(currentYear, currentMonth, d);
+      const isPast = cellDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const isSunday = cellDate.getDay() === 0;
+      const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+
+      if (isPast || isSunday) {
+        cell.classList.add('past');
+      } else {
+        if (isToday) cell.classList.add('today');
+        if (selectedDay && selectedDay.d === d && selectedDay.m === currentMonth && selectedDay.y === currentYear) {
+          cell.classList.add('selected');
+        }
+        cell.addEventListener('click', () => selectDay(d, cell));
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  function selectDay(d, cell) {
+    document.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+    cell.classList.add('selected');
+    selectedDay = { d, m: currentMonth, y: currentYear };
+    renderSlots(d);
+  }
+
+  function renderSlots(d) {
+    const section = document.getElementById('slotsSection');
+    const label = document.getElementById('slotsLabel');
+    const grid = document.getElementById('slotsGrid');
+
+    const dayNames = ['dom','lun','mar','mié','jue','vie','sáb'];
+    const date = new Date(currentYear, currentMonth, d);
+    label.textContent = dayNames[date.getDay()] + ' ' + d + ' de ' + MONTHS[currentMonth];
+
+    const allSlots = [...SLOTS_AM, ...SLOTS_PM];
+    grid.innerHTML = '';
+    allSlots.forEach((time, i) => {
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.textContent = time;
+      if (UNAVAILABLE.includes(i % allSlots.length)) {
+        slot.classList.add('unavailable');
+      } else {
+        slot.addEventListener('click', () => {
+          document.querySelectorAll('.slot.selected').forEach(s => s.classList.remove('selected'));
+          slot.classList.add('selected');
+        });
+      }
+      grid.appendChild(slot);
+    });
+
+    section.style.display = 'block';
+  }
+
+  function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+    renderCalendar();
+  }
+
+  function submitBooking() {
+    const form = document.getElementById('bookingForm');
+    const success = document.getElementById('bookingSuccess');
+    form.style.display = 'none';
+    success.style.display = 'block';
+  }
+
+  renderCalendar();
+</script>
+</body>
+</html>
